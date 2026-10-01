@@ -1,22 +1,30 @@
-class Solution {
-    private List<String> ans = new ArrayList<>();
-    private int n;
+import java.util.*;
 
+class Solution {
     public List<String> generateParenthesis(int n) {
-        this.n = n;
-        dfs(0, 0, "");
-        return ans;
+        List<String> result = new ArrayList<>();
+        backtrack(result, new StringBuilder(), 0, 0, n);
+        return result;
     }
 
-    private void dfs(int l, int r, String t) {
-        if (l > n || r > n || l < r) {
+    private void backtrack(List<String> result, StringBuilder current,
+                           int open, int close, int n) {
+
+        if (current.length() == 2 * n) {
+            result.add(current.toString());
             return;
         }
-        if (l == n && r == n) {
-            ans.add(t);
-            return;
+
+        if (open < n) {
+            current.append('(');
+            backtrack(result, current, open + 1, close, n);
+            current.deleteCharAt(current.length() - 1);
         }
-        dfs(l + 1, r, t + "(");
-        dfs(l, r + 1, t + ")");
+
+        if (close < open) {
+            current.append(')');
+            backtrack(result, current, open, close + 1, n);
+            current.deleteCharAt(current.length() - 1);
+        }
     }
 }
